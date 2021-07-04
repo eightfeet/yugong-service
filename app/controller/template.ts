@@ -1,4 +1,7 @@
 import Controller from '../core/base_controller';
+import publicTpl from '../data/data';
+import tpl1 from '../data/tpl1';
+import tpl4 from '../data/tpl4';
 
 export default class HomeController extends Controller {
 /**
@@ -30,8 +33,11 @@ export default class HomeController extends Controller {
    * 查询模板列表
    */
   public getList() {
-    this.success('查询模板列表。公共模板，私有模板');
-
+    const { ctx } = this;
+    const query = ctx.query;
+    let result;
+    if (query.type === '2') result = publicTpl;
+    this.success(result);
   }
 
   /**
@@ -39,7 +45,12 @@ export default class HomeController extends Controller {
    * 查询模板列表
    */
   public getItem() {
-    this.success('查询模板项。公共模板，私有模板');
+    const { ctx } = this;
+    const query = ctx.query;
+    let result;
+    if (query.id === '1') result = tpl1;
+    if (query.id === '4') result = tpl4;
+    this.success(result);
   }
 
   /**
