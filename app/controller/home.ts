@@ -1,4 +1,4 @@
-import { Controller } from 'egg';
+import Controller from '../core/base_controller';
 
 export default class HomeController extends Controller {
   public async index() {
