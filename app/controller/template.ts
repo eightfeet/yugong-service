@@ -9,7 +9,8 @@ export default class HomeController extends Controller {
  * 创建模板
  */
   public async create() {
-    this.success('创建模板');
+    const { ctx } = this;
+    this.success(ctx.request.body);
   }
 
   /**

@@ -15,6 +15,11 @@ export default (appInfo: EggAppInfo) => {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
   };
 
+  // 自定义请求头
+  config.csrf = {
+    headerName: 'x-csrf-token',
+  };
+
   // the return config will combines to EggAppConfig
   return {
     ...config,
