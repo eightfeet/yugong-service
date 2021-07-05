@@ -35,6 +35,8 @@ export default class HomeController extends Controller {
    */
   public getList() {
     const { ctx } = this;
+    console.log(this.app);
+    console.log(ctx);
     const query = ctx.query;
     let result;
     if (query.type === '2') result = publicTpl;

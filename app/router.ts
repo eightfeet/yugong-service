@@ -12,4 +12,5 @@ export default (app: Application) => {
   router.get('/api/template/getList', controller.template.getList);
   router.post('/api/template/publish', controller.template.publish);
   router.post('/api/template/unpublish', controller.template.unpublish);
+  router.get('/api/user', controller.user.create);
 };

@@ -20,6 +20,14 @@ export default (appInfo: EggAppInfo) => {
     headerName: 'x-csrf-token',
   };
 
+  config.sequelize = {
+    dialect: 'sqlite',
+    storage: 'app/data/yugong.sqlite',
+    define: {
+      freezeTableName: true,
+    },
+  };
+
   // the return config will combines to EggAppConfig
   return {
     ...config,
