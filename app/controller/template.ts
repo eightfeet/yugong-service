@@ -9,7 +9,12 @@ export default class HomeController extends Controller {
  * 创建模板
  */
   public async create() {
-    const { ctx } = this;
+    const { ctx, app } = this;
+    const { title, pageData, appData, tag, terminal, cove, discript } = ctx.request.body;
+
+    console.log(title);
+    app.model.Template.create({ title, pageData, appData, tag, terminal, cove, discript });
+
     this.success(ctx.request.body);
   }
 

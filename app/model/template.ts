@@ -4,14 +4,19 @@ import { Application } from 'egg';
 export default (app: Application) => {
   const { INTEGER, STRING } = app.Sequelize;
 
-  const User = app.model.define('user', {
+  const Template = app.model.define('template', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    name: STRING,
-    age: INTEGER,
+    title: STRING,
+    discript: STRING,
+    cove: STRING,
+    terminal: STRING,
+    tag: STRING,
+    pageData: STRING,
+    appData: STRING,
   }, {
     timestamps: false,
   });
 
-  return User;
+  return Template;
 };
 
