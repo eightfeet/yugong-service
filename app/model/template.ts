@@ -13,6 +13,7 @@ export default (app: Application) => {
     tag: STRING,
     pageData: STRING,
     appData: STRING,
+    public: INTEGER,
   }, {
     timestamps: false,
   });
