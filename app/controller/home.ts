@@ -1,4 +1,4 @@
-import Controller from '../core/base_controller';
+import Controller from '../core/baseController';
 
 export default class HomeController extends Controller {
   public async index() {

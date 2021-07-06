@@ -8,7 +8,11 @@ export default (appInfo: EggAppInfo) => {
   config.keys = appInfo.name + '_1625267294140_3558';
 
   // add your egg config in here
-  config.middleware = [];
+  config.middleware = [ 'errorHandler' ];
+  // 仅作用于api路径
+  config.errorHandler = {
+    match: '/api',
+  };
 
   // add your special config in here
   const bizConfig = {

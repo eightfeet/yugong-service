@@ -25,7 +25,6 @@
     "egg": "^2.6.1",
     "egg-scripts": "^2.6.0",
     "egg-sequelize": "^6.0.0",
-    "egg-validate": "^2.0.2",
     "sequelize": "^6.6.4",
     "sqlite3": "^5.0.2"
   },
