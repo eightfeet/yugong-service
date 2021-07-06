@@ -8,12 +8,10 @@ export default class HomeController extends Controller {
     const { ctx, app } = this;
     const query: {[key: string]: any} = { ...ctx.query };
     if (query.id) query.id = parseInt(query.id, 10);
-    if (query.public) query.public = parseInt(query.public, 10);
-    console.log(333, query);
-
+    if (query.isPublic) query.isPublic = parseInt(query.isPublic, 10);
     // 查询主键值
     const data = await app.model.Template.findAll({
-      attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'discript', 'public' ],
+      attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'discript', 'isPublic' ],
       where: query,
     });
     ctx.body = data;
@@ -26,9 +24,9 @@ export default class HomeController extends Controller {
 
   public async create() {
     const { ctx, app } = this;
-    const { title, pageData, appData, tag, terminal, cove, discript } = ctx.request.body;
-    await app.model.Template.create({ title, pageData, appData, tag, terminal, cove, discript });
-    ctx.body = true;
+    const { title, pageData, appData, tag, terminal, cove, discript, isPublic } = ctx.request.body;
+    const result = await app.model.Template.create({ title, pageData, appData, tag, terminal, cove, discript, isPublic });
+    ctx.body = result.getDataValue('id');
   }
 
   public async show() {
@@ -45,7 +43,16 @@ export default class HomeController extends Controller {
   }
 
   public async update() {
-    this.checkSuccess('update');
+    const { ctx, app } = this;
+    const id = parseInt(ctx.params.id, 10);
+    const update = ctx.request.body;
+    // 查询主键值
+    const data = await app.model.Template.update(update, {
+      where: {
+        id,
+      },
+    });
+    ctx.body = data;
   }
 
   public async destroy() {
