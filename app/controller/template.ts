@@ -41,16 +41,6 @@ export default class HomeController extends Controller {
     // 查询主键值
     const data = await app.model.Template.findByPk(parseInt(id, 10));
     ctx.body = data;
-
-    // app.model.Template.findAll({
-    //   where: {
-    //   }
-    // })
-
-    // let result;
-    // if (query.id === '1') result = tpl1;
-    // if (query.id === '4') result = tpl4;
-    // ctx.body = result;
   }
 
   public async update() {
