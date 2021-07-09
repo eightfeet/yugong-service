@@ -1,4 +1,5 @@
 import Controller from '../core/baseController';
+import { Sequelize, Op } from 'sequelize';
 // import publicTpl from '../data/data';
 // import tpl1 from '../data/tpl1';
 // import tpl4 from '../data/tpl4';
@@ -6,20 +7,28 @@ import Controller from '../core/baseController';
 export default class HomeController extends Controller {
   public async index() {
     const { ctx, app } = this;
-    const query: {[key: string]: any} = { ...ctx.query };
-    if (query.id) query.id = parseInt(query.id, 10);
-    if (query.isPublic) query.isPublic = parseInt(query.isPublic, 10);
-    // 查询主键值
-    const data = await app.model.Template.findAll({
+    const { tag, ...otherquery }: {[key: string]: any} = { ...ctx.query };
+    const tagQuery = tag?.split(',').filter(Boolean).map(item => ({ [Op.like]: `%,${item},%` })) || [];
+    console.log(tagQuery);
+
+    if (otherquery.id) otherquery.id = parseInt(otherquery.id, 10);
+    if (otherquery.isPublic) otherquery.isPublic = parseInt(otherquery.isPublic, 10);
+
+    const criteria = {
       attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'discript', 'isPublic' ],
-      where: query,
-    });
+      where: {
+        [Op.and]: [
+          otherquery,
+          Sequelize.where(Sequelize.literal('"," || tag || ","'), {
+            [Op.and]: tagQuery,
+          }),
+        ],
+      },
+    };
+
+    const data = await app.model.Template.findAll(criteria);
     ctx.body = data;
 
-    // const query = ctx.query;
-    // let result;
-    // if (query.type === '2') result = publicTpl;
-    // ctx.body = result;
   }
 
   public async create() {
@@ -35,6 +44,11 @@ export default class HomeController extends Controller {
     // 查询主键值
     const data = await app.model.Template.findByPk(parseInt(id, 10));
     ctx.body = data;
+
+    // app.model.Template.findAll({
+    //   where: {
+    //   }
+    // })
 
     // let result;
     // if (query.id === '1') result = tpl1;
