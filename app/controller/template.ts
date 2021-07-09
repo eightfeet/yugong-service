@@ -1,8 +1,5 @@
 import Controller from '../core/baseController';
 import { Sequelize, Op } from 'sequelize';
-// import publicTpl from '../data/data';
-// import tpl1 from '../data/tpl1';
-// import tpl4 from '../data/tpl4';
 
 export default class HomeController extends Controller {
   public async index() {
