@@ -10,9 +10,14 @@ export default class HomeController extends Controller {
 
     if (otherquery.id) otherquery.id = parseInt(otherquery.id, 10);
     if (otherquery.isPublic) otherquery.isPublic = parseInt(otherquery.isPublic, 10);
+    if (otherquery.title) {
+      otherquery.title = {
+        [Op.like]: `%${otherquery.title}%`,
+      };
+    }
 
     const criteria = {
-      attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'discript', 'isPublic' ],
+      attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'describe', 'isPublic' ],
       where: {
         [Op.and]: [
           otherquery,
@@ -30,8 +35,8 @@ export default class HomeController extends Controller {
 
   public async create() {
     const { ctx, app } = this;
-    const { title, pageData, appData, tag, terminal, cove, discript, isPublic } = ctx.request.body;
-    const result = await app.model.Template.create({ title, pageData, appData, tag, terminal, cove, discript, isPublic });
+    const { title, pageData, appData, tag, terminal, cove, describe, isPublic } = ctx.request.body;
+    const result = await app.model.Template.create({ title, pageData, appData, tag, terminal, cove, describe, isPublic });
     ctx.body = result.getDataValue('id');
   }
 

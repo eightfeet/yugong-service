@@ -7,7 +7,7 @@ export default (app: Application) => {
   const Template = app.model.define('template', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     title: STRING,
-    discript: STRING,
+    describe: STRING,
     cove: STRING,
     terminal: STRING,
     tag: STRING,
