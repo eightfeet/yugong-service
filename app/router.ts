@@ -8,5 +8,8 @@ export default (app: Application) => {
   router.resources('template', '/api/template', errorHandler, controller.template);
   // 标签
   router.resources('tag', '/api/tag', errorHandler, controller.tag);
-  router.get('/api/user', controller.user.create);
+  // 用户
+  router.resources('user', '/api/user', controller.user);
+  // 登录
+  router.post('/api/login', controller.login.create);
 };

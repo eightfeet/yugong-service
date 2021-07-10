@@ -7,9 +7,10 @@ export default (app: Application) => {
   const User = app.model.define('user', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     name: STRING,
-    age: INTEGER,
+    password: STRING,
   }, {
     timestamps: false,
+    freezeTableName: true,
   });
 
   return User;
