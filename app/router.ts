@@ -9,7 +9,9 @@ export default (app: Application) => {
   // 标签
   router.resources('tag', '/api/tag', errorHandler, controller.tag);
   // 用户
-  router.resources('user', '/api/user', controller.user);
+  router.get('/api/user/getuser', controller.user.getUser);
+  // 注册
+  router.post('/api/register', controller.user.create);
   // 登录
-  router.post('/api/login', controller.login.create);
+  router.post('/api/login', controller.user.login);
 };
