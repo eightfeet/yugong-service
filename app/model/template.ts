@@ -14,6 +14,7 @@ export default (app: Application) => {
     pageData: STRING,
     appData: STRING,
     isPublic: INTEGER,
+    userId: INTEGER,
   }, {
     timestamps: false,
   });

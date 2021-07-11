@@ -9,7 +9,13 @@ export default class HomeController extends Controller {
     console.log(tagQuery);
 
     if (otherquery.id) otherquery.id = parseInt(otherquery.id, 10);
+    if (otherquery.userId) otherquery.userId = parseInt(otherquery.userId, 10);
     if (otherquery.isPublic) otherquery.isPublic = parseInt(otherquery.isPublic, 10);
+    // 私有且用户id与当前用户ID不一致时，禁止查询
+    if (otherquery.isPublic === 0) {
+      if (!otherquery.userId) ctx.throw('缺少参数 userId');
+      if (otherquery.userId !== ctx.session.id) ctx.throw('未登录或userId与当前用户不匹配');
+    }
     if (otherquery.title) {
       otherquery.title = {
         [Op.like]: `%${otherquery.title}%`,
@@ -17,7 +23,7 @@ export default class HomeController extends Controller {
     }
 
     const criteria = {
-      attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'describe', 'isPublic' ],
+      attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'describe', 'isPublic', 'userId' ],
       where: {
         [Op.and]: [
           otherquery,
@@ -35,8 +41,8 @@ export default class HomeController extends Controller {
 
   public async create() {
     const { ctx, app } = this;
-    const { title, pageData, appData, tag, terminal, cove, describe, isPublic } = ctx.request.body;
-    const result = await app.model.Template.create({ title, pageData, appData, tag, terminal, cove, describe, isPublic });
+    const { title, pageData, appData, tag, terminal, cove, describe, isPublic, userId } = ctx.request.body;
+    const result = await app.model.Template.create({ title, pageData, appData, tag, terminal, cove, describe, isPublic, userId });
     ctx.body = result.getDataValue('id');
   }
 
