@@ -14,4 +14,6 @@ export default (app: Application) => {
   router.post('/api/register', controller.user.create);
   // 登录
   router.post('/api/login', controller.user.login);
+  // 退出
+  router.post('/api/loginOut', controller.user.loginOut);
 };
