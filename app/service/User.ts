@@ -1,5 +1,5 @@
 import { Service } from 'egg';
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 
 /**
  * 由于密码特殊所以我们需要将密码加密后再存到数据库里面，比对的时候也是比对的加密后的密码，这里用到的是加密算法BCrypt
@@ -45,7 +45,7 @@ export default class UserService extends Service {
   /**
    * 将密码跟加密的密码对比
    */
-  public cpmpareSync(password, hashedPassword) {
+  public cpmpareSync(password: string, hashedPassword: string) {
     return bcrypt.compareSync(password, hashedPassword);
   }
 }

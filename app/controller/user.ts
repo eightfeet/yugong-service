@@ -18,12 +18,12 @@ export default class UserController extends Controller {
 
   public async create() {
     const ctx = this.ctx;
-    const { name, password } = ctx.request.body;
+    const { username, password } = ctx.request.body;
 
     // 检查数据库里面是否存在这个用户名
     const user = await ctx.service.user.getByArgs(
       'findOne',
-      { name },
+      { username },
       'password',
     );
     if (user) {
@@ -34,7 +34,7 @@ export default class UserController extends Controller {
     // 加密密码并创建账户
     const HSPassword = ctx.service.user.hashPassword(password);
     const result = ctx.model.User.create({
-      name,
+      username,
       password: HSPassword,
     });
 
@@ -45,14 +45,27 @@ export default class UserController extends Controller {
   // 查询用户
   public async login() {
     const { ctx } = this;
-    const { id } = ctx.params;
+    const { username } = ctx.request.body;
 
-    // 查询主键值
-    const data = await ctx.service.user.getByArgs(
+    // 根据唯一用户名查询用户
+    const { dataValues } = await ctx.service.user.getByArgs(
       'findOne',
-      { id },
-      'password',
+      { username },
+      '',
     );
-    ctx.body = data;
+    if (!dataValues) {
+      ctx.throw('用户名不存在！');
+    }
+
+    // 密码检查
+    const { password, ...otherValue } = dataValues;
+    const cpmpare = ctx.service.user.cpmpareSync(ctx.request.body.password, password);
+    if (!cpmpare) {
+      ctx.throw('密码不正确！');
+    }
+
+    // 缓存到session
+    ctx.session = otherValue;
+    ctx.body = otherValue;
   }
 }

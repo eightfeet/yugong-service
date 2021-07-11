@@ -6,7 +6,7 @@ export default (app: Application) => {
 
   const User = app.model.define('user', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    name: STRING,
+    username: STRING,
     password: STRING,
   }, {
     timestamps: false,
