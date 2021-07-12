@@ -49,6 +49,14 @@ export default class UserController extends Controller {
    */
   public async login() {
     const { ctx } = this;
+    const loginToken = ctx.cookies.get('token');
+    if (loginToken) {
+      const cpmpare = ctx.service.user.cpmpareSync(ctx.session.username, loginToken);
+      if (cpmpare) {
+        ctx.body = ctx.session;
+        return;
+      }
+    }
     const { username } = ctx.request.body;
 
     // 根据唯一用户名查询用户
@@ -70,9 +78,11 @@ export default class UserController extends Controller {
       ctx.throw('密码不正确！');
     }
 
+    const token = ctx.service.user.hashPassword(otherValue.username);
     // 缓存到session
     ctx.session = otherValue;
     ctx.body = otherValue;
+    ctx.cookies.set('token', token);
   }
 
   /**
