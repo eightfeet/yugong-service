@@ -49,14 +49,6 @@ export default class UserController extends Controller {
    */
   public async login() {
     const { ctx } = this;
-    const loginToken = ctx.cookies.get('token');
-    if (loginToken) {
-      const cpmpare = ctx.service.user.cpmpareSync(ctx.session.username, loginToken);
-      if (cpmpare) {
-        ctx.body = ctx.session;
-        return;
-      }
-    }
     const { username } = ctx.request.body;
 
     // 根据唯一用户名查询用户
@@ -90,7 +82,8 @@ export default class UserController extends Controller {
    */
   public loginOut() {
     const { ctx } = this;
-    ctx.session = {};
+    ctx.session = null;
+    ctx.cookies.set('token', null);
     ctx.body = '';
   }
 }
