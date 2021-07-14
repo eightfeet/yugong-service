@@ -4,7 +4,7 @@ import { Sequelize, Op } from 'sequelize';
 export default class HomeController extends Controller {
   public async index() {
     const { ctx, app } = this;
-    const { tag, ...otherquery }: {[key: string]: any} = { ...ctx.query };
+    const { tag, limit, offset, ...otherquery }: {[key: string]: any} = { ...ctx.query };
     const tagQuery = tag?.split(',').filter(Boolean).map(item => ({ [Op.like]: `%,${item},%` })) || [];
     console.log(tagQuery);
 
@@ -22,7 +22,7 @@ export default class HomeController extends Controller {
       };
     }
 
-    const criteria = {
+    const criteria: any = {
       attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'describe', 'isPublic', 'userId' ],
       where: {
         [Op.and]: [
@@ -33,6 +33,9 @@ export default class HomeController extends Controller {
         ],
       },
     };
+
+    if (Number(limit)) criteria.limit = Number(limit);
+    if (Number(offset)) criteria.offset = Number(offset);
 
     const data = await app.model.Template.findAll(criteria);
     ctx.body = data;
