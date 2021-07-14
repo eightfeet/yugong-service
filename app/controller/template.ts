@@ -34,11 +34,16 @@ export default class HomeController extends Controller {
       },
     };
 
-    if (Number(limit)) criteria.limit = Number(limit);
-    if (Number(offset)) criteria.offset = Number(offset);
+    criteria.limit = Number(limit) ? Number(limit) : 4;
+    criteria.offset = Number(offset) ? Number(offset) : 0;
 
-    const data = await app.model.Template.findAll(criteria);
-    ctx.body = data;
+    const data = await app.model.Template.findAndCountAll(criteria);
+
+    ctx.body = {
+      ...data,
+      limit: criteria.limit,
+      offset: criteria.offset,
+    };
 
   }
 
