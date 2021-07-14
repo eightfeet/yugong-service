@@ -34,7 +34,7 @@ export default class HomeController extends Controller {
       },
     };
 
-    criteria.limit = Number(limit) ? Number(limit) : 4;
+    criteria.limit = Number(limit) ? Number(limit) : 1;
     criteria.offset = Number(offset) ? Number(offset) : 0;
 
     const data = await app.model.Template.findAndCountAll(criteria);
