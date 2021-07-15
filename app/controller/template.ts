@@ -1,11 +1,14 @@
 import Controller from '../core/baseController';
 import { Sequelize, Op } from 'sequelize';
+import clearEmptyOfObject from '../core/helper/clearEmptyOfObject';
 
 export default class HomeController extends Controller {
   public async index() {
     const { ctx, app } = this;
-    const { tag, limit, offset, ...otherquery }: {[key: string]: any} = { ...ctx.query };
-    const tagQuery = tag?.split(',').filter(Boolean).map(item => ({ [Op.like]: `%,${item},%` })) || [];
+    let query = { ...ctx.query };
+    query = clearEmptyOfObject(query);
+    const { tag, limit, offset, ...otherquery }: {[key: string]: any} = query;
+    const tagQuery = tag?.split(',').filter(Boolean).map((item: any) => ({ [Op.like]: `%,${item},%` })) || [];
     console.log(tagQuery);
 
     if (otherquery.id) otherquery.id = parseInt(otherquery.id, 10);
@@ -21,6 +24,8 @@ export default class HomeController extends Controller {
         [Op.like]: `%${otherquery.title}%`,
       };
     }
+    // let handleObj = { ...otherquery };
+    // handleObj = clearEmptyOfObject(otherquery);
 
     const criteria: any = {
       attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'describe', 'isPublic', 'userId' ],
