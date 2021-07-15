@@ -24,8 +24,6 @@ export default class HomeController extends Controller {
         [Op.like]: `%${otherquery.title}%`,
       };
     }
-    // let handleObj = { ...otherquery };
-    // handleObj = clearEmptyOfObject(otherquery);
 
     const criteria: any = {
       attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'describe', 'isPublic', 'userId' ],
