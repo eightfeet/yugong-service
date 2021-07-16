@@ -2,7 +2,7 @@ import { Application } from 'egg';
 
 
 export default (app: Application) => {
-  const { INTEGER, STRING } = app.Sequelize;
+  const { INTEGER, STRING, DATE } = app.Sequelize;
 
   const Template = app.model.define('template', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
@@ -15,8 +15,10 @@ export default (app: Application) => {
     appData: STRING,
     isPublic: INTEGER,
     userId: INTEGER,
+    createdAt: DATE,
+    updatedAt: DATE,
   }, {
-    timestamps: false,
+    timestamps: true,
   });
 
   return Template;

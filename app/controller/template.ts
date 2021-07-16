@@ -26,7 +26,8 @@ export default class HomeController extends Controller {
     }
 
     const criteria: any = {
-      attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'describe', 'isPublic', 'userId' ],
+      attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'describe', 'isPublic', 'userId', 'createdAt', 'updatedAt' ],
+      order: [[ 'updatedAt', 'DESC' ]],
       where: {
         [Op.and]: [
           otherquery,
