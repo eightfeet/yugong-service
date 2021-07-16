@@ -25,9 +25,16 @@ export default class HomeController extends Controller {
       };
     }
 
+    // 个人模板按更新时间排序
+    let order = [[ 'updatedAt', 'DESC' ]];
+    // 公共模板按创建时间
+    if (otherquery.isPublic === 1) {
+      order = [[ 'createdAt', 'DESC' ]];
+    }
+
     const criteria: any = {
       attributes: [ 'id', 'title', 'tag', 'terminal', 'cove', 'describe', 'isPublic', 'userId', 'createdAt', 'updatedAt' ],
-      order: [[ 'updatedAt', 'DESC' ]],
+      order,
       where: {
         [Op.and]: [
           otherquery,
