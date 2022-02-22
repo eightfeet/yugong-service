@@ -10,6 +10,8 @@ export default (app: Application) => {
   router.resources('tag', '/api/tag', errorHandler, controller.tag);
   // 用户
   router.get('/api/user/getuser', controller.user.getUser);
+  // 文件上传
+  router.post('/api/upload', controller.upload.upload);
   // 注册
   router.post('/api/register', controller.user.create);
   // 登录
