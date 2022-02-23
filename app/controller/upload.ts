@@ -1,30 +1,41 @@
 
 import * as path from 'path';
+import * as fs from 'fs';
+// import * as awaitStreamReady from 'await-stream-ready';
+// import * as sendToWormhole from 'stream-wormhole';
 import Controller from '../core/baseController';
-import * as sendToWormhole from 'stream-wormhole';
+// const awaitWriteStream = awaitStreamReady.read;
 
 export default class UploadController extends Controller {
   public async upload() {
-    const ctx = this.ctx;
-    const stream = await ctx.getFileStream();
-    console.log('xxxxx=====', ctx.getFileStream());
-    const name = 'yugong_upload/' + path.basename(stream.filename);
-    // 文件处理，
-    let result;
-    try {
-      result = { url: 'xxxxx' };
-      console.log(result, name);
-    } catch (err) {
-      // 必须将上传的文件流消费掉，要不然浏览器响应会卡死
-      await sendToWormhole(stream);
-      throw err;
-    }
+    const { ctx } = this;
+    const parts = ctx.multipart();
+    let part;
+    const result: any[] = [];
+    // parts() 返回 promise 对象
+    while ((part = await parts()) != null) {
+      let length = 0;
+      if (part.length) {
+        length = part[1];
+        // 获取其他参数
+      } else {
+        if (!part.filename) return;
+        // 处理文件流
+        const file: {[keys: string]: any} = {};
+        file.name = part.filename;
+        file.type = part.mimeType;
+        const fileName = `yg_${Date.now()}_${part.filename}`;
+        const filePath = path.join(this.config.baseDir, 'app/public/uploads', fileName); // 保存地址
+        const writable = fs.createWriteStream(filePath);// 创建写入流
+        await part.pipe(writable); // 开始写入
+        file.fileUrl = `http://127.0.0.1:7001/public/uploads/${fileName}`;
+        result.push(file);
+      }
+      console.log(length);
 
-    ctx.body = {
-      url: result.url,
-      // 所有表单字段都能通过 `stream.fields` 获取到
-      fields: stream.fields,
-    };
+    }
+    ctx.status = 200;
+    ctx.body = result[0];
   }
 }
 
