@@ -1,14 +1,12 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
-// import * as awaitStreamReady from 'await-stream-ready';
-// import * as sendToWormhole from 'stream-wormhole';
 import Controller from '../core/baseController';
-// const awaitWriteStream = awaitStreamReady.read;
 
 export default class UploadController extends Controller {
   public async upload() {
-    const { ctx } = this;
+    const { ctx, config } = this;
+
     const parts = ctx.multipart();
     let part;
     const result: any[] = [];
@@ -28,7 +26,7 @@ export default class UploadController extends Controller {
         const filePath = path.join(this.config.baseDir, 'app/public/uploads', fileName); // 保存地址
         const writable = fs.createWriteStream(filePath);// 创建写入流
         await part.pipe(writable); // 开始写入
-        file.fileUrl = `http://127.0.0.1:7001/public/uploads/${fileName}`;
+        file.fileUrl = `${config.webHost}/public/uploads/${fileName}`;
         result.push(file);
       }
       console.log(length);
