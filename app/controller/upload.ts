@@ -22,7 +22,7 @@ export default class UploadController extends Controller {
         const file: {[keys: string]: any} = {};
         file.name = part.filename;
         file.type = part.mimeType;
-        const fileName = `yg_${Date.now()}_${part.filename}`;
+        const fileName = `yg_${Date.now()}_${Math.floor((Math.random() * 100) + 1)}`;
         const filePath = path.join(this.config.baseDir, 'app/public/uploads', fileName); // 保存地址
         const writable = fs.createWriteStream(filePath);// 创建写入流
         await part.pipe(writable); // 开始写入
